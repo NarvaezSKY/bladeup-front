@@ -17,11 +17,12 @@ import { UploadServiceForm } from "./UploadService";
 import { DeleteServiceForm } from "./DeleteServiceForm";
 
 const BarberHome = () => {
-  const { appointments, services } = useBarberHomeData();
+  const { appointments, services,handleUpdateAppointmentStatus } = useBarberHomeData();
   const [selectedService, setSelectedService] =
     useState<IGetAllServicesRes | null>(null);
-const [modalMode, setModalMode] = useState<"upload" | "edit" | "delete" | null>(null);
-
+  const [modalMode, setModalMode] = useState<
+    "upload" | "edit" | "delete" | null
+  >(null);
 
   return (
     <DefaultLayout>
@@ -99,6 +100,7 @@ const [modalMode, setModalMode] = useState<"upload" | "edit" | "delete" | null>(
         <Divider className="my-2" />
         <h1 className="text-3xl font-bold my-2">Últimas solicitudes</h1>
         <div className="flex flex-col gap-4">
+          {appointments.length === 0 && <p>No hay citas pendientes</p>}
           {appointments.map((item, index) => (
             <Card key={index} shadow="sm">
               <CardHeader className="gap-4 items-center">
@@ -107,23 +109,25 @@ const [modalMode, setModalMode] = useState<"upload" | "edit" | "delete" | null>(
                   <h4 className="font-semibold text-large">
                     {item.client.name} {item.client.lastName}
                   </h4>
-                  <p className="text-default-500 text-sm">
-                    {item.service.name}
-                  </p>
+                  {item.service?.name && (
+                    <p className="text-default-500 text-sm">
+                      {item.service.name}
+                    </p>
+                  )}
                 </div>
               </CardHeader>
               <CardBody className="text-default-600 text-sm pt-0 px-6 pb-4">
-                {item.service.description}
+                {item.service?.description}
               </CardBody>
               <CardFooter className="flex justify-between items-center p-4">
                 <p className="text-default-700 font-bold">
-                  {item.service.price}
+                  {item.service?.price}
                 </p>
                 <div className="flex gap-2">
-                  <Button color="primary" size="sm" radius="full">
+                  <Button color="primary" size="sm" radius="full" onClick={() => handleUpdateAppointmentStatus(item._id, "accepted")}>
                     Aceptar
                   </Button>
-                  <Button color="danger" size="sm" radius="full">
+                  <Button color="danger" size="sm" radius="full" onClick={() => handleUpdateAppointmentStatus(item._id, "rejected")}>
                     Rechazar
                   </Button>
                 </div>
@@ -152,14 +156,29 @@ const [modalMode, setModalMode] = useState<"upload" | "edit" | "delete" | null>(
                 : ""
         }
       >
-        {modalMode === "upload" && <UploadServiceForm method="upload" onClose={() => setModalMode(null)}/>}
+        {modalMode === "upload" && (
+          <UploadServiceForm
+            method="upload"
+            onClose={() => setModalMode(null)}
+          />
+        )}
 
         {modalMode === "edit" && selectedService && (
-          <UploadServiceForm method="edit" initialValues={selectedService} onClose={() => setModalMode(null)} />
+          <UploadServiceForm
+            method="edit"
+            initialValues={selectedService}
+            onClose={() => setModalMode(null)}
+          />
         )}
 
         {modalMode === "delete" && selectedService && (
-          <DeleteServiceForm service={selectedService} onclose={() => {setModalMode(null) ; setSelectedService(null)}} />
+          <DeleteServiceForm
+            service={selectedService}
+            onclose={() => {
+              setModalMode(null);
+              setSelectedService(null);
+            }}
+          />
         )}
       </ReusableModal>
     </DefaultLayout>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useBarberStore } from "../../store/BarberStore";
 import { toast } from "sonner";
+import { useAppointmentStore } from "@/app/shared/store/Appointment";
 
 export const useBarberHomeData = () => {
   const {
@@ -12,6 +13,8 @@ export const useBarberHomeData = () => {
     error,
     deleteService,
   } = useBarberStore();
+
+  const { updateAppointmentStatus } = useAppointmentStore();
 
   const [loading, setLoading] = useState(true);
 
@@ -56,6 +59,17 @@ export const useBarberHomeData = () => {
     }
     setLoading(false);
   };
+
+  const handleUpdateAppointmentStatus = async (id: string, status: string) => {
+    try {
+      await updateAppointmentStatus(id, status);
+      toast.success("Appointment status updated successfully!");
+      await getBarberAppointments();
+    } catch (error) {
+      toast.error("Error updating appointment status");
+    }
+  };
+
   return {
     username: "Barber",
     services: services || [],
@@ -64,6 +78,7 @@ export const useBarberHomeData = () => {
     uploadService,
     error,
     handleDeleteService,
+    handleUpdateAppointmentStatus,
     appointments: appointments || [],
   };
 };
