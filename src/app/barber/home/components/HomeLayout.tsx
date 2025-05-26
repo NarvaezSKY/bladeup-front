@@ -66,7 +66,7 @@ const BarberHome = () => {
                   <b className="truncate w-full">{item.description}</b>
                   <p className="text-default-500">${item.price}</p>
                   <div className="flex justify-between items-center w-full">
-                    <Button
+                    {/* <Button
                       variant="bordered"
                       color="warning"
                       radius="full"
@@ -78,7 +78,7 @@ const BarberHome = () => {
                       }}
                     >
                       <p className="text-lg">Editar</p>
-                    </Button>
+                    </Button> */}
                     <Button
                       variant="bordered"
                       color="danger"
@@ -126,7 +126,7 @@ const BarberHome = () => {
                 </p>
                 <div className="flex gap-2">
                   <Button
-                    color="primary"
+                    color="secondary"
                     size="sm"
                     radius="full"
                     onClick={() =>
