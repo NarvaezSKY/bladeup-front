@@ -120,6 +120,7 @@ export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
           className="w-full mt-2"
             onChange={(e) => {
               handleUpdateAppointmentStatus(appointment._id, e.target.value);
+              (document.activeElement as HTMLElement | null)?.blur();
               setOpen(false);
             }}
           >

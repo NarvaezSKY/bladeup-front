@@ -174,7 +174,10 @@ const BarberHome = () => {
         {modalMode === "upload" && (
           <UploadServiceForm
             method="upload"
-            onClose={() => setModalMode(null)}
+            onClose={() => {
+              (document.activeElement as HTMLElement | null)?.blur();
+              setModalMode(null);
+            }}
           />
         )}
 
@@ -182,7 +185,10 @@ const BarberHome = () => {
           <UploadServiceForm
             method="edit"
             initialValues={selectedService}
-            onClose={() => setModalMode(null)}
+            onClose={() => {
+              (document.activeElement as HTMLElement | null)?.blur();
+              setModalMode(null);
+            }}
           />
         )}
 
