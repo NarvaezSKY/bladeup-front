@@ -3,7 +3,7 @@ import axiosInstance from "@/axios/instance";
 import { IClientRepository } from "../domain/client.repository";
 import { IGetAllBarbersRes } from "../domain/get-all-barbers";
 import { IGetAllServicesRes } from "../domain/get-all-services";
-import { IMakeAppointmentReq, IAppointmentRes } from "../domain/make-appointment";
+import { IMakeAppointmentReq, IAppointmentRes, IService } from "../domain/make-appointment";
 
 const getAllBarbers = async (): Promise<IGetAllBarbersRes[]> => {
   try {
@@ -45,7 +45,7 @@ const getAllClientAppointments = async (): Promise<IAppointmentRes[]> => {
   }
 };
 
-const getServicesByBarber = async (barberId: string): Promise<IGetAllServicesRes[]> => {
+const getServicesByBarber = async (barberId: string): Promise<IService[]> => {
   try {
     const response = await axiosInstance.get(`/barber-services/barber/${barberId}`);
     return response.data;
