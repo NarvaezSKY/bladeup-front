@@ -64,7 +64,6 @@ export function UploadServiceForm({
     setSelectedFile(null);
   };
 
-
   useEffect(() => {
     if (initialValues) {
       console.log("initialValues", initialValues);
@@ -83,8 +82,10 @@ export function UploadServiceForm({
     >
       <Select
         isRequired
+        id="category"
         label="Category"
         placeholder="Selecciona una categoría"
+        size="md"
         variant="bordered"
         {...register("category", { required: "Este campo es obligatorio" })}
         errorMessage={errors.category?.message}
@@ -151,7 +152,14 @@ export function UploadServiceForm({
       {error && <span className="text-danger text-sm -mt-2">{error}</span>}
 
       <div className="flex gap-4">
-        <Button color="secondary" isDisabled={isLoading} type="submit" onClick={() => {onClose}}>
+        <Button
+          color="secondary"
+          isDisabled={isLoading}
+          type="submit"
+          onClick={() => {
+            onClose;
+          }}
+        >
           {isLoading
             ? "Cargando..."
             : method === "edit"
