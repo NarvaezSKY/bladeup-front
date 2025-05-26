@@ -17,7 +17,8 @@ import { UploadServiceForm } from "./UploadService";
 import { DeleteServiceForm } from "./DeleteServiceForm";
 
 const BarberHome = () => {
-  const { appointments, services,handleUpdateAppointmentStatus } = useBarberHomeData();
+  const { appointments, services, handleUpdateAppointmentStatus } =
+    useBarberHomeData();
   const [selectedService, setSelectedService] =
     useState<IGetAllServicesRes | null>(null);
   const [modalMode, setModalMode] = useState<
@@ -111,23 +112,37 @@ const BarberHome = () => {
                   </h4>
                   {item.service?.name && (
                     <p className="text-default-500 text-sm">
-                      {item.service.name}
+                      Solicitó: {item.service.name}
                     </p>
                   )}
                 </div>
               </CardHeader>
               <CardBody className="text-default-600 text-sm pt-0 px-6 pb-4">
-                {item.service?.description}
+                Descripción del servicio solicitado: {item.service?.description}
               </CardBody>
               <CardFooter className="flex justify-between items-center p-4">
                 <p className="text-default-700 font-bold">
-                  {item.service?.price}
+                  Precio del servicio: ${item.service?.price}
                 </p>
                 <div className="flex gap-2">
-                  <Button color="primary" size="sm" radius="full" onClick={() => handleUpdateAppointmentStatus(item._id, "accepted")}>
+                  <Button
+                    color="primary"
+                    size="sm"
+                    radius="full"
+                    onClick={() =>
+                      handleUpdateAppointmentStatus(item._id, "accepted")
+                    }
+                  >
                     Aceptar
                   </Button>
-                  <Button color="danger" size="sm" radius="full" onClick={() => handleUpdateAppointmentStatus(item._id, "rejected")}>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    radius="full"
+                    onClick={() =>
+                      handleUpdateAppointmentStatus(item._id, "rejected")
+                    }
+                  >
                     Rechazar
                   </Button>
                 </div>

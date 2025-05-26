@@ -7,6 +7,10 @@ import {
   Button,
 } from "@heroui/react";
 import { format } from "date-fns";
+import ReusableModal from "./ConfirmModal";
+import React from "react";
+import { Select, SelectItem } from "@heroui/select";
+import { useAppointment } from "../../home/hooks/useAppointment";
 
 interface AppointmentCardProps {
   appointment: {
@@ -25,7 +29,21 @@ interface AppointmentCardProps {
 }
 
 export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
+  const [open, setOpen] = React.useState(false);
+  const { handleUpdateAppointmentStatus } = useAppointment();
   const { client, barber, service, status, date } = appointment;
+  const statusMap: Record<string, string> = {
+    accepted: "Aceptado",
+    rejected: "Rechazado",
+    cancelled: "Cancelado",
+    pending: "Pendiente",
+  };
+  const statusColorMap: Record<string, "secondary" | "success" | "warning" | "danger"> = {
+  pending: "secondary",
+  accepted: "success",
+  rejected: "warning",
+  cancelled: "danger",
+};
 
   return (
     <Card className="w-[280px] min-w-[280px] max-w-[280px] flex-shrink-0 border border-secondary bg-default-50 shadow-sm">
@@ -74,16 +92,41 @@ export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
 
       <CardFooter className="px-4 py-2 flex justify-end">
         <Button
-          color={status === "pending" ? "secondary" : "success"}
+          color={statusColorMap[status] ?? "secondary"}
           variant="ghost"
           radius="full"
           size="sm"
           className="w-full"
           disabled={status !== "pending"}
+          onClick={() => {
+            setOpen(true);
+          }}
         >
-          <b className="text-sm">{status?.toUpperCase() ?? "N/A"}</b>
+          <b className="text-sm">{statusMap[status] ?? "Estado desconocido"}</b>
         </Button>
       </CardFooter>
+      <ReusableModal
+        isOpen={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+        modalTitle="Cancelar cita"
+        onSubmit={() => {}}
+      >
+        <div>
+          <h1>Cambiar estado de la cita</h1>
+          <Select
+          variant="bordered"
+          className="w-full mt-2"
+            onChange={(e) => {
+              handleUpdateAppointmentStatus(appointment._id, e.target.value);
+              setOpen(false);
+            }}
+          >
+            <SelectItem key="cancelled">Cancelar</SelectItem>
+          </Select>
+        </div>
+      </ReusableModal>
     </Card>
   );
 };

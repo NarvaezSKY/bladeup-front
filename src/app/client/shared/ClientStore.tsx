@@ -6,12 +6,14 @@ import {
   getAllBarbersUseCase,
   getAllClientAppointmentsUseCase,
   makeAppointmentUseCase,
+  getServicesByBarberUseCase,
 } from "@/core/client/application";
 import { IGetAllServicesRes } from "@/core/client/domain/get-all-services";
 import { IGetAllBarbersRes } from "@/core/client/domain/get-all-barbers";
 import {
   IAppointmentRes,
   IMakeAppointmentReq,
+  IService,
 } from "@/core/client/domain/make-appointment";
 
 type State = {
@@ -20,6 +22,7 @@ type State = {
   loading: boolean;
   error: string | null;
   appointments: IAppointmentRes[] | null;
+  servicesByBarber: IService[] | null;
 };
 
 type Actions = {
@@ -27,6 +30,7 @@ type Actions = {
   getAllBarbers: () => Promise<void>;
   getAllClientAppointments: () => Promise<void>;
   makeAppointment: (data: IMakeAppointmentReq) => Promise<void>;
+  getServicesByBarber: (barberId: string) => Promise<void>;
 };
 type Store = State & Actions;
 
@@ -36,6 +40,7 @@ export const useClientStore = create<Store>((set) => ({
   loading: false,
   error: null,
   appointments: null,
+  servicesByBarber: null,
 
   getAllServices: async () => {
     set({ loading: true });
@@ -76,6 +81,21 @@ export const useClientStore = create<Store>((set) => ({
       console.log("Appointment made successfully:", response);
     } catch (error) {
       set({ error: "Error fetching appointments" });
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  getServicesByBarber: async (barberId) => {
+    set({ loading: true });
+    try {
+      const response = await getServicesByBarberUseCase(
+        clientRepository,
+        barberId
+      )();
+      set({ servicesByBarber: response, error: null });
+    } catch (error) {
+      set({ error: "Error fetching services by barber" });
     } finally {
       set({ loading: false });
     }

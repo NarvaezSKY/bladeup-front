@@ -37,10 +37,20 @@ const makeAppointment = async (data: IMakeAppointmentReq): Promise<IAppointmentR
 
 const getAllClientAppointments = async (): Promise<IAppointmentRes[]> => {
   try {
-    const response = await axiosInstance.get("/appointments/client=pending");
+    const response = await axiosInstance.get("/appointments/client-auth");
     return response.data;
   } catch (error) {
     console.error("Error during get all appointments:", error);
+    throw error;
+  }
+};
+
+const getServicesByBarber = async (barberId: string): Promise<IGetAllServicesRes[]> => {
+  try {
+    const response = await axiosInstance.get(`/barber-services/barber/${barberId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error during get services by barber:", error);
     throw error;
   }
 };
@@ -50,5 +60,6 @@ export const clientRepository: IClientRepository = {
   getAllBarbers,
   getAllServices,
   makeAppointment,
-  getAllClientAppointments
+  getAllClientAppointments,
+  getServicesByBarber
 };

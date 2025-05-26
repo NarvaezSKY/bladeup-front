@@ -15,13 +15,19 @@ import ReusableModal from "../../shared/components/ConfirmModal";
 import { useState } from "react";
 import { IGetAllServicesRes } from "../../../../core/client/domain/get-all-services";
 import { Appointments } from "./Appointments";
+import { ServiceCard } from "./ServiceCard";
+import { useBarberServices } from "../hooks/useBarberServices";
 
 const ClientHome = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedService, setSelectedService] =
     useState<IGetAllServicesRes | null>(null);
-  const { username, services, barbers } = useClientHome();
+  const { username, services, barbers,  } = useClientHome();
   const { makeClientAppointment } = useAppointment();
+  const [modalType, setModalType] = useState<
+    "appointment" | "barberServices" | null
+  >(null);
+const { fetchServicesByBarber, servicesByBarber } = useBarberServices();
   return (
     <DefaultLayout>
       <div className="flex flex-col min-h-screen p-2 bg-transparent rounded-lg">
@@ -31,9 +37,7 @@ const ClientHome = () => {
 
         <div>
           <section className="col-span-2 p-4 rounded shadow ">
-            <h2 className="text-xl font-semibold mb-4">
-              Últimos servicios publicados
-            </h2>
+            <h2 className="text-xl font-semibold mb-4">Servicios publicados</h2>
             <div className="my-2  rounded-lg p-4">
               <Divider className="my-2" />
               <div className="w-full overflow-x-auto pb-2 mt-4 ">
@@ -72,6 +76,7 @@ const ClientHome = () => {
                           onClick={() => {
                             setSelectedService(item);
                             setOpenModal(true);
+                            setModalType("appointment");
                           }}
                         >
                           ¡Pide una cita!
@@ -132,7 +137,7 @@ const ClientHome = () => {
           <Divider className="my-4" />
         </div>
         <section className="mt-6 p-4 rounded shadow ">
-          <h2 className="text-xl font-semibold mb-4">Barberos Blade Up!</h2>
+          <h2 className="text-xl font-semibold mb-2">Barberos Blade Up!</h2>
           <div className="flex gap-4 overflow-x-auto pb-2 flex-nowrap min-w-full px-2">
             {barbers.map((barber, index) => (
               <Card
@@ -179,8 +184,14 @@ const ClientHome = () => {
                       size="sm"
                       variant="solid"
                       className="w-full mt-2"
+                      onClick={() => {
+                        setSelectedService(null);
+                        setOpenModal(true);
+                        setModalType("barberServices");
+                        fetchServicesByBarber(barber._id);
+                      }}
                     >
-                      Ver perfil
+                      Ver sus servicios disponibles
                     </Button>
                   </div>
                 </CardFooter>
@@ -188,49 +199,64 @@ const ClientHome = () => {
             ))}
           </div>
         </section>
+        <Divider className="my-4" />
       </div>
       <ReusableModal
         isOpen={openModal}
         onClose={() => {
           setOpenModal(false);
         }}
-        modalTitle={"Solicitar cita"}
+        modalTitle={
+          modalType === "appointment"
+            ? "Solicitar cita"
+            : `Servicios del barbero`
+        }
       >
-        <h2>
-          ¿Quieres solicitar una cita con {selectedService?.barber.name}{" "}
-          {selectedService?.barber.lastName}?
-        </h2>
-        <p>Servicio: {selectedService?.name}</p>
-        <p>Precio: ${selectedService?.price}</p>
+        {modalType === "appointment" && (
+          <>
+            <h2>
+              ¿Quieres solicitar una cita con {selectedService?.barber.name}{" "}
+              {selectedService?.barber.lastName}?
+            </h2>
+            <p>Servicio: {selectedService?.name}</p>
+            <p>Precio: ${selectedService?.price}</p>
 
-        <Button
-          color="secondary"
-          radius="full"
-          size="sm"
-          variant="solid"
-          className="w-full mt-2"
-          onClick={() => {
-            makeClientAppointment({
-              barber: selectedService?.barber._id || "",
-              service: selectedService?._id || "",
-            });
-            setOpenModal(false);
-          }}
-        >
-          Solicitar cita
-        </Button>
-        <Button
-          color="default"
-          radius="full"
-          size="sm"
-          variant="bordered"
-          className="w-full mt-2"
-          onClick={() => {
-            setOpenModal(false);
-          }}
-        >
-          Cancelar
-        </Button>
+            <Button
+              color="secondary"
+              radius="full"
+              size="sm"
+              variant="solid"
+              className="w-full mt-2"
+              onClick={() => {
+                makeClientAppointment({
+                  barber: selectedService?.barber._id || "",
+                  service: selectedService?._id || "",
+                });
+                setOpenModal(false);
+              }}
+            >
+              Solicitar cita
+            </Button>
+            <Button
+              color="default"
+              radius="full"
+              size="sm"
+              variant="bordered"
+              className="w-full mt-2"
+              onClick={() => {
+                setOpenModal(false);
+              }}
+            >
+              Cancelar
+            </Button>
+          </>
+        )}
+
+        {modalType === "barberServices" && (
+          <div>
+            <ServiceCard item={servicesByBarber} />
+          </div>
+        )}
       </ReusableModal>
     </DefaultLayout>
   );

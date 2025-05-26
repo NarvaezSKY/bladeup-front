@@ -1,4 +1,5 @@
 export * from './get-all-services.use-case'
 export * from './get-all-barbers.use-case'
 export * from './make-appointment.use-case'
+export * from './get-services-by-barber.use-case'
 export * from './get-all-client-appointments.use-case'

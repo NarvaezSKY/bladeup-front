@@ -35,6 +35,7 @@ export interface IService {
     name: string,
     description: string,
     price: number,
-    barber: IBarber,
+    barber: string,
+    category: string,
     imageUrl: string,
 }

@@ -26,7 +26,6 @@ export const useBarberHomeData = () => {
 
       setLoading(false);
     };
-
     fetchData();
   }, []);
 
