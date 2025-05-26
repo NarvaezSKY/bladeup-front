@@ -9,96 +9,78 @@ import {
   Image,
   Divider,
 } from "@heroui/react";
-
-const mockServices = [
-  {
-    title: "Corte moderno",
-    price: "$20.000",
-    img: "https://i.pinimg.com/736x/d5/55/40/d5554045789d07d46cab34ef9f4cf6bf.jpg",
-  },
-  {
-    title: "Diseño de barba",
-    price: "$15.000",
-    img: "https://i.pinimg.com/236x/7a/6b/3d/7a6b3d01156977d042aa26aae3e0a3dd.jpg",
-  },
-  {
-    title: "Corte + Barba",
-    price: "$30.000",
-    img: "https://i.pinimg.com/236x/0a/cf/0a/0acf0a33d4fa10bc72d4bb2b1ba520da.jpg",
-  },
-  {
-    title: "Perfilado premium",
-    price: "$18.000",
-    img: "https://i.pinimg.com/236x/cb/00/ae/cb00ae94382be9e984630119f361a428.jpg",
-  },
-];
-
-const mockBarbers = [
-  {
-    name: "Carlos Barber",
-    username: "@carlosblade",
-    avatar: "https://heroui.com/avatars/avatar-1.png",
-    bio: "Experto en fades y diseños personalizados.",
-  },
-  {
-    name: "Andrés Corte",
-    username: "@andresfade",
-    avatar: "https://heroui.com/avatars/avatar-2.png",
-    bio: "Barbero con más de 10 años de experiencia.",
-  },
-  {
-    name: "Alejandro Style",
-    username: "@galohub",
-    avatar: "https://heroui.com/avatars/avatar-4.png",
-    bio: "Apasionado de la moda y el estilo.",
-  },
-  {
-    name: "Ricardo Barber",
-    username: "@ricardobarber",
-    avatar: "https://heroui.com/avatars/avatar-3.png",
-    bio: "Barbero con experiencia en cortes de cabello.",
-  },
-];
+import { useClientHome } from "../hooks/useHome";
+import { useAppointment } from "../hooks/useAppointment";
+import ReusableModal from "../../shared/components/ConfirmModal";
+import { useState } from "react";
+import { IGetAllServicesRes } from "../../../../core/client/domain/get-all-services";
+import { Appointments } from "./Appointments";
 
 const ClientHome = () => {
-  const username = "Juan";
-
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedService, setSelectedService] =
+    useState<IGetAllServicesRes | null>(null);
+  const { username, services, barbers } = useClientHome();
+  const { makeClientAppointment } = useAppointment();
   return (
     <DefaultLayout>
-      <div className="min-h-screen p-6">
-        <h1 className="text-3xl font-bold my-2">Bienvenido, {username}</h1>
+      <div className="flex flex-col min-h-screen p-2 bg-transparent rounded-lg">
+        <h1 className="text-4xl font-bold my-2">Bienvenido, {username}</h1>
+        <Appointments />
         <Divider className="my-4" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <section className="col-span-2 p-4 rounded shadow">
+        <div>
+          <section className="col-span-2 p-4 rounded shadow ">
             <h2 className="text-xl font-semibold mb-4">
               Últimos servicios publicados
             </h2>
-            <div className="flex gap-4 overflow-x-auto pb-2">
-              {mockServices.map((item, index) => (
-                <Card
-                  key={index}
-                  isPressable
-                  shadow="sm"
-                  className="min-w-[160px] max-w-[160px]"
-                >
-                  <CardBody className="overflow-visible p-0">
-                    <Image
-                      alt={item.title}
-                      className="object-cover h-[100px]"
-                      radius="lg"
+            <div className="my-2  rounded-lg p-4">
+              <Divider className="my-2" />
+              <div className="w-full overflow-x-auto pb-2 mt-4 ">
+                <div className="flex gap-3 min-w-full flex-nowrap  ">
+                  {services.map((item, index) => (
+                    <Card
+                      key={index}
                       shadow="sm"
-                      width={300}
-                      height={300}
-                      src={item.img}
-                    />
-                  </CardBody>
-                  <CardFooter className="text-small justify-between">
-                    <b className="truncate">{item.title}</b>
-                    <p className="text-default-500">{item.price}</p>
-                  </CardFooter>
-                </Card>
-              ))}
+                      className="min-w-[260px] max-w-[260px] bg-default-200 flex-shrink-0"
+                    >
+                      <CardBody className="overflow-visible p-0">
+                        <Image
+                          alt={item.name}
+                          className="object-cover h-[100px]"
+                          radius="lg"
+                          shadow="sm"
+                          width={300}
+                          height={300}
+                          src={item.imageUrl}
+                        />
+                      </CardBody>
+                      <CardFooter className="flex flex-col justify-center items-start p-2 gap-1">
+                        <b>{item.name}</b>
+                        <b className="truncate w-full">{item.description}</b>
+                        <p className="text-default-500">${item.price}</p>
+                        <p>
+                          Ofrecido por: {item.barber.name}{" "}
+                          {item.barber.lastName}
+                        </p>
+                        <Button
+                          variant="solid"
+                          color="secondary"
+                          radius="full"
+                          size="sm"
+                          className="w-full mt-2"
+                          onClick={() => {
+                            setSelectedService(item);
+                            setOpenModal(true);
+                          }}
+                        >
+                          ¡Pide una cita!
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
           <Divider className="my-4" />
@@ -149,11 +131,14 @@ const ClientHome = () => {
 
           <Divider className="my-4" />
         </div>
-        <section className="mt-6 p-4 rounded shadow">
+        <section className="mt-6 p-4 rounded shadow ">
           <h2 className="text-xl font-semibold mb-4">Barberos Blade Up!</h2>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {mockBarbers.map((barber, index) => (
-              <Card key={index} className="min-w-[300px] max-w-[300px]">
+          <div className="flex gap-4 overflow-x-auto pb-2 flex-nowrap min-w-full px-2">
+            {barbers.map((barber, index) => (
+              <Card
+                key={index}
+                className="min-w-[300px] max-w-[300px] flex-shrink-0 bg-default-200"
+              >
                 <CardHeader className="justify-between pb-2">
                   <div className="flex gap-5">
                     <Avatar
@@ -161,37 +146,92 @@ const ClientHome = () => {
                       radius="full"
                       size="md"
                       className="m-4"
-                      src={barber.avatar}
                     />
                     <div className="flex flex-col gap-1 items-start justify-center ml-2">
                       <h4 className="text-small font-semibold leading-none text-default-600">
                         {barber.name}
                       </h4>
                       <h5 className="text-small tracking-tight text-default-400">
-                        {barber.username}
+                        {barber.lastName}
                       </h5>
                     </div>
                   </div>
                 </CardHeader>
                 <CardBody className="px-4 pt-0 pb-4 text-small text-default-400">
-                  <p>{barber.bio}</p>
+                  <p>{barber.active}</p>
                 </CardBody>
                 <CardFooter className="px-4 pt-0">
-                  <Button
-                    color="primary"
-                    radius="full"
-                    size="sm"
-                    variant="solid"
-                    className="w-full"
-                  >
-                    ¡Pide una cita!
-                  </Button>
+                  <div className="flex flex-col gap-1 items-start justify-center">
+                    <h4 className="text-small font-semibold leading-none text-default-600">
+                      Se unió en:{" "}
+                      {new Intl.DateTimeFormat("es-CO", {
+                        dateStyle: "long",
+                        timeZone: "America/Bogota",
+                      }).format(new Date(barber.creationDate))}
+                    </h4>
+
+                    <h5 className="text-small tracking-tight text-default-400">
+                      Estado: {barber.isBarberActive ? "Activo" : "Inactivo"}
+                    </h5>
+                    <Button
+                      color="secondary"
+                      radius="full"
+                      size="sm"
+                      variant="solid"
+                      className="w-full mt-2"
+                    >
+                      Ver perfil
+                    </Button>
+                  </div>
                 </CardFooter>
               </Card>
             ))}
           </div>
         </section>
       </div>
+      <ReusableModal
+        isOpen={openModal}
+        onClose={() => {
+          setOpenModal(false);
+        }}
+        modalTitle={"Solicitar cita"}
+      >
+        <h2>
+          ¿Quieres solicitar una cita con {selectedService?.barber.name}{" "}
+          {selectedService?.barber.lastName}?
+        </h2>
+        <p>Servicio: {selectedService?.name}</p>
+        <p>Precio: ${selectedService?.price}</p>
+
+        <Button
+          color="secondary"
+          radius="full"
+          size="sm"
+          variant="solid"
+          className="w-full mt-2"
+          onClick={() => {
+            makeClientAppointment({
+              barber: selectedService?.barber._id || "",
+              service: selectedService?._id || "",
+            });
+            setOpenModal(false);
+          }}
+        >
+          Solicitar cita
+        </Button>
+        <Button
+          color="default"
+          radius="full"
+          size="sm"
+          variant="bordered"
+          className="w-full mt-2"
+          onClick={() => {
+            setOpenModal(false);
+          }}
+        >
+          Cancelar
+        </Button>
+      </ReusableModal>
     </DefaultLayout>
   );
 };

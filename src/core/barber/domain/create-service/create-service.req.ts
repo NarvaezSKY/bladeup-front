@@ -1,7 +1,7 @@
 export interface ICreateServiceReq {
-  serviceName: string;
-  customPrice: number;
-  customDescription: string;
-  category: string;
-  barberId: string;
+  name: string;
+  price: number;
+  description: string;
+  category: 'Corte clásico' | 'Fade' | 'Diseño' | 'Barba' | 'Color' | 'Tratamiento' | 'Otro';
+  image: File
 }

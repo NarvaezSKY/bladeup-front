@@ -1,11 +1,16 @@
-export interface IGetAllServicesRes{
-  id: string;
-  serviceName: string;
-  customPrice: number;
-  customDescription: string;
-  isActive: boolean;
-  category: string;
-  createdAt: string;
-  updatedAt: string;
-  barberId: string;
+export interface IGetAllServicesRes {
+  _id: string;
+  name: string;
+  price: number;
+  description: string;
+  barber: IBbarber;
+  imageUrl: string;
+  category: 'Corte clásico' | 'Fade' | 'Diseño' | 'Barba' | 'Color' | 'Tratamiento' | 'Otro';
+
+}
+
+interface IBbarber {
+  _id: string;
+  name: string;
+  lastName: string;
 }

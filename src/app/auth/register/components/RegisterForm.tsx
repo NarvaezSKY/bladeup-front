@@ -1,9 +1,11 @@
+import React, { useState } from "react";
 import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
 import { FaExclamationCircle } from "react-icons/fa";
 import { useRegisterForm } from "../hooks/useRegister";
 import DefaultLayout from "@/layouts/default";
 import { title } from "@/components/primitives";
+import { Button } from "@heroui/react";
 
 export const RegisterForm = () => {
   const {
@@ -11,7 +13,23 @@ export const RegisterForm = () => {
     handleSubmit,
     formState: { errors },
     onSubmit,
+    watch,
   } = useRegisterForm();
+
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmError, setConfirmError] = useState<string | null>(null);
+
+  const password = watch("password");
+
+  const handleConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+    if (value !== password) {
+      setConfirmError("Las contraseñas no coinciden");
+    } else {
+      setConfirmError(null);
+    }
+  };
 
   const roles = [
     { value: "client", label: "Cliente", key: "client" },
@@ -29,7 +47,7 @@ export const RegisterForm = () => {
             <p className="text-gray-600">
               ¿Ya tienes una cuenta?{" "}
               <a
-                className="text-primary hover:underline font-semibold"
+                className="text-secondary hover:underline font-semibold"
                 href="/login"
               >
                 Inicia sesión aquí
@@ -37,33 +55,63 @@ export const RegisterForm = () => {
             </p>
           </div>
 
-          <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-            {/* Nombre de Usuario */}
+          <form
+            className="space-y-5"
+            onSubmit={handleSubmit((data) => {
+              if (confirmPassword !== password) {
+                setConfirmError("Las contraseñas no coinciden");
+                return;
+              }
+              setConfirmError(null);
+              onSubmit(data);
+            })}
+          >
             <div className="relative my-2">
               <Input
-                id="username"
-                label="Nombre de Usuario"
+                id="name"
+                label="Nombres"
                 type="text"
-                {...register("username", {
-                  required: "El nombre de usuario es requerido",
+                variant="bordered"
+                {...register("name", {
+                  required: "Tu nombre es requerido",
                 })}
                 fullWidth
-                errorMessage={errors.username?.message}
-                isInvalid={!!errors.username}
+                errorMessage={errors.name?.message}
+                isInvalid={!!errors.name}
               />
-              {!!errors.username && (
+              {!!errors.name && (
                 <div className="absolute top-2 right-3 flex items-center text-red-500 pointer-events-none">
                   <FaExclamationCircle />
                 </div>
               )}
             </div>
 
-            {/* Correo Electrónico */}
+            <div className="relative my-2">
+              <Input
+                id="lastName"
+                label="Apellidos"
+                type="text"
+                variant="bordered"
+                {...register("lastName", {
+                  required: "Tus apellidos son requeridos",
+                })}
+                fullWidth
+                errorMessage={errors.lastName?.message}
+                isInvalid={!!errors.lastName}
+              />
+              {!!errors.lastName && (
+                <div className="absolute top-2 right-3 flex items-center text-red-500 pointer-events-none">
+                  <FaExclamationCircle />
+                </div>
+              )}
+            </div>
+
             <div className="relative my-2">
               <Input
                 id="email"
                 label="Correo Electrónico"
                 type="email"
+                variant="bordered"
                 {...register("email", {
                   required: "El correo es requerido",
                   pattern: {
@@ -82,12 +130,12 @@ export const RegisterForm = () => {
               )}
             </div>
 
-            {/* Contraseña */}
             <div className="relative my-2">
               <Input
                 id="password"
                 label="Contraseña"
                 type="password"
+                variant="bordered"
                 {...register("password", {
                   required: "La contraseña es requerida",
                   minLength: {
@@ -105,13 +153,30 @@ export const RegisterForm = () => {
                 </div>
               )}
             </div>
-
-            {/* Rol */}
+            <div className="relative my-2">
+              <Input
+                id="confirmPassword"
+                label="Confirmar contraseña"
+                type="password"
+                variant="bordered"
+                value={confirmPassword}
+                onChange={handleConfirmChange}
+                fullWidth
+                errorMessage={confirmError ?? undefined}
+                isInvalid={!!confirmError}
+              />
+              {!!confirmError && (
+                <div className="absolute top-2 right-2 flex items-center pointer-events-none">
+                  <FaExclamationCircle color="white"/>
+                </div>
+              )}
+            </div>
             <div className="relative my-2">
               <Select
                 className="max-w-full"
                 items={roles}
                 label="Rol"
+                variant="bordered"
                 placeholder="Selecciona un rol"
                 {...register("role", {
                   required: "El rol es requerido",
@@ -126,14 +191,16 @@ export const RegisterForm = () => {
               )}
             </div>
 
-            {/* Botón */}
             <div>
-              <button
+              <Button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                variant="bordered"
+                color="secondary"
+                size="lg"
+                fullWidth
               >
                 Registrarse
-              </button>
+              </Button>
             </div>
           </form>
         </div>

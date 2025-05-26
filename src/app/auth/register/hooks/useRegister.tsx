@@ -11,7 +11,8 @@ export const useRegisterForm = () => {
 
   const onSubmit = async (data: IRegisterReq) => {
     const isSuccess = await registerUser({
-      username: data.username,
+      name: data.name,
+      lastName: data.lastName,
       email: data.email,
       password: data.password,
       role: data.role,

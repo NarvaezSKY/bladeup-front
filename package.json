@@ -25,6 +25,7 @@
     "@heroui/use-theme": "2.1.6",
     "@react-aria/visually-hidden": "3.8.21",
     "@react-types/shared": "3.28.0",
+    "@types/date-fns": "^2.6.3",
     "@types/lodash": "^4.17.16",
     "@types/lodash.debounce": "^4.0.9",
     "axios": "^1.9.0",

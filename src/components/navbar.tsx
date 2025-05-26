@@ -17,6 +17,7 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import logo from "../assets/logoBladeUp.png";
 import { GithubIcon } from "@/components/icons";
 import { useAuthStore } from "@/app/shared/store/AuthStore";
+import { toast } from "sonner";
 
 export const Navbar = () => {
   const { token, logout } = useAuthStore();
@@ -25,7 +26,8 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate("/login");
+    toast.success("Sesión cerrada correctamente");
   };
 
   return (
@@ -38,7 +40,7 @@ export const Navbar = () => {
             href="/"
           >
             <img alt="Logo" className="h-16 w-16" src={logo} />
-            <p className="font-bold text-inherit">BladeUp!</p>
+            <p className="font-bold text-inherit text-3xl">BladeUp!</p>
           </Link>
         </NavbarBrand>
         {!token && (
@@ -70,7 +72,7 @@ export const Navbar = () => {
           {token && (
             <button
               onClick={handleLogout}
-              className="text-primary hover:underline font-semibold"
+              className="text-secondary hover:underline font-semibold"
             >
               Cerrar sesión
             </button>

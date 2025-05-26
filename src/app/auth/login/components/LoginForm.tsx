@@ -1,6 +1,5 @@
 import { Input } from "@heroui/input";
 import { FaExclamationCircle } from "react-icons/fa";
-import { Toaster } from "sonner";
 
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
@@ -12,16 +11,16 @@ export default function LoginForm() {
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center min-h-[60vh] pb-8 md:py-10">
-        <div className="w-full max-w-md p-8 space-y-6">
-          <div className="text-center">
-            <h2 className={title()}>Iniciar sesión</h2>
+        <div className="w-full max-w-md space-y-6 p-4 rounded-lg shadow-sm">
+          <div className="text-center my-2">
+            <h2 className={title()} >Iniciar sesión</h2>
             <p className="mt-2 text-gray-600">
               Inicia sesión para acceder a tu cuenta.
             </p>
             <p className="text-gray-600">
               ¿No tienes una cuenta?{" "}
               <a
-                className="text-primary hover:underline font-semibold"
+                className="text-secondary hover:underline font-semibold"
                 href="/register"
               >
                 Regístrate aquí
@@ -30,19 +29,20 @@ export default function LoginForm() {
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            <div className="relative my-2">
+            <div className="relative py-2">
               <Input
+                variant="bordered"
                 id="email"
                 label="Nombre de usuario"
                 type="input"
-                {...register("username", {
+                {...register("email", {
                   required: "El nombre de usuario es requerido",
                 })}
                 fullWidth
-                errorMessage={errors.username?.message}
-                isInvalid={!!errors.username}
+                errorMessage={errors.email?.message}
+                isInvalid={!!errors.email}
               />
-              {errors.username && (
+              {errors.email && (
                 <div className="absolute top-2 right-3 flex items-center text-red-500 pointer-events-none">
                   <FaExclamationCircle />
                 </div>
@@ -51,6 +51,7 @@ export default function LoginForm() {
 
             <div className="relative">
               <Input
+                variant="bordered"
                 id="password"
                 label="Contraseña"
                 type="password"
@@ -70,7 +71,7 @@ export default function LoginForm() {
 
             <div className="my-2">
               <button
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-secondary hover:bg-secondary-dark focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2"
                 type="submit"
               >
                 Iniciar Sesión
@@ -79,7 +80,6 @@ export default function LoginForm() {
           </form>
         </div>
       </section>
-      <Toaster richColors position="top-center" />
     </DefaultLayout>
   );
 }

@@ -1,11 +1,7 @@
-export interface ICreateServiceRes{
-    id: string;
-    serviceName: string;
-    customPrice: number;
-    customDescription: string;
-    isActive: boolean;
-    category: string;
-    createdAt: string;
-    updatedAt: string;
-    barberId: string;
+export interface ICreateServiceRes {
+    _id: string;
+    name: string;
+    description: string;
+    price: number;
+    barber: string;
 }

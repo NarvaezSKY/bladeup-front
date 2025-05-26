@@ -1,7 +1,9 @@
 import { ILoginReq, ILoginRes } from "./login";
-import { IRegisterReq } from "./register";
+import { IRegisterReq, IRegisterRes } from "./register";
+import { IVerifyRes } from "./verify";
 
 export interface IAuthRepository {
     login(data: ILoginReq): Promise<ILoginRes>;
-    register (data: IRegisterReq): Promise<any>;
+    register(data: IRegisterReq): Promise<IRegisterRes>;
+    verify(): Promise<IVerifyRes>;
 }

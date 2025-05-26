@@ -21,7 +21,7 @@ export default function IndexPage() {
         <div className="flex gap-3">
           <Link
             className={buttonStyles({
-              color: "primary",
+              color: "secondary",
               radius: "full",
               variant: "shadow",
             })}

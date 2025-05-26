@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export type LoginFormInputs = {
-  username: string;
+  email: string;
   password: string;
 };
 
@@ -29,6 +29,7 @@ export const useLoginForm = () => {
       await login(data);
 
       const { userId, loginError, role } = useAuthStore.getState();
+      console.log("Login response:", { userId, loginError, role });
 
       if (userId) {
         toast.success("Inicio de sesión exitoso");
@@ -39,11 +40,12 @@ export const useLoginForm = () => {
         if (role === "client") {
           navigate("/home/client", { replace: true });
         }
+        
 
       } else {
         const message = loginError || "Nombre de usuario o contraseña incorrectos";
         toast.error(message);
-        setError("username", { message });
+        setError("email", { message });
         setError("password", { message });
       }
     } catch (error) {

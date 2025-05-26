@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useClientStore } from "../../shared/ClientStore";
+import { useAuthStore } from "@/app/shared/store/AuthStore";
 
-export const useClientHomeData = () => {
-  const { barbers, services, getAllBarbers, getAllServices } = useClientStore();
+export const useClientHome = () => {
+  const { barbers, services, getAllBarbers, getAllServices, getAllClientAppointments  } = useClientStore();
+  const { role } = useAuthStore();
 
   const [loading, setLoading] = useState(true);
 
@@ -11,6 +13,7 @@ export const useClientHomeData = () => {
       setLoading(true);
       await getAllBarbers();
       await getAllServices();
+      await getAllClientAppointments();
       setLoading(false);
     };
 
@@ -18,7 +21,7 @@ export const useClientHomeData = () => {
   }, []);
 
   return {
-    username: "Usuario",
+    username: role,
     services: services || [],
     barbers: barbers || [],
     loading,

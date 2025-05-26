@@ -1,5 +1,7 @@
-export interface ILoginRes{
-    token: string
-    userId: string
-    role: string
+
+export interface ILoginRes {
+    token: string;
+    id: string;
+    email: string;
+    role: string;
 }
