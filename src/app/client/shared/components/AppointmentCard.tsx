@@ -9,7 +9,7 @@ import {
 import { format } from "date-fns";
 import ReusableModal from "./ConfirmModal";
 import React from "react";
-import { Select, SelectItem } from "@heroui/select";
+// import { Select, SelectItem } from "@heroui/select";
 import { useAppointment } from "../../home/hooks/useAppointment";
 
 interface AppointmentCardProps {
@@ -115,17 +115,22 @@ export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
       >
         <div>
           <h1>Cambiar estado de la cita</h1>
-          <Select
-          variant="bordered"
-          className="w-full mt-2"
+          <select
+            className="w-full mt-2 border rounded px-3 py-2"
+            defaultValue=""
             onChange={(e) => {
-              handleUpdateAppointmentStatus(appointment._id, e.target.value);
-              (document.activeElement as HTMLElement | null)?.blur();
-              setOpen(false);
+              if (e.target.value) {
+                handleUpdateAppointmentStatus(appointment._id, e.target.value);
+                (document.activeElement as HTMLElement | null)?.blur();
+                setOpen(false);
+              }
             }}
           >
-            <SelectItem key="cancelled">Cancelar</SelectItem>
-          </Select>
+            <option value="" disabled>
+              Selecciona una acción
+            </option>
+            <option value="cancelled">Cancelar</option>
+          </select>
         </div>
       </ReusableModal>
     </Card>

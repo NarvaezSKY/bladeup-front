@@ -4,7 +4,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  useDisclosure,
 } from "@heroui/react";
 
 interface ReusableModalProps {
@@ -21,13 +20,11 @@ export default function ReusableModal({
   children,
   modalTitle,
 }: ReusableModalProps) {
-  const { onOpenChange } = useDisclosure();
   return (
     <Modal
       isOpen={isOpen}
       scrollBehavior="inside"
       onClose={onClose}
-      onOpenChange={onOpenChange}
     >
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">{modalTitle}</ModalHeader>

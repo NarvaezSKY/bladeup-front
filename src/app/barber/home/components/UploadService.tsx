@@ -4,8 +4,8 @@ import {
   Input,
   Button,
   Textarea,
-  Select,
-  SelectItem,
+  // Select,
+  // SelectItem,
 } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -80,25 +80,26 @@ export function UploadServiceForm({
       onReset={() => reset()}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Select
-        isRequired
+      <select
         id="category"
-        label="Category"
-        placeholder="Selecciona una categoría"
-        size="md"
-        variant="bordered"
+        className="border rounded px-3 py-2 w-full"
         {...register("category", { required: "Este campo es obligatorio" })}
-        errorMessage={errors.category?.message}
-        isInvalid={!!errors.category}
+        defaultValue=""
       >
-        <SelectItem key="Corte clásico">Corte clásico</SelectItem>
-        <SelectItem key="Fade">Fade</SelectItem>
-        <SelectItem key="Diseño">Diseño</SelectItem>
-        <SelectItem key="Barba">Barba</SelectItem>
-        <SelectItem key="Color">Color</SelectItem>
-        <SelectItem key="Tratamiento">Tratamiento</SelectItem>
-        <SelectItem key="Otro">Otro</SelectItem>
-      </Select>
+        <option value="" disabled>
+          Selecciona una categoría
+        </option>
+        <option value="Corte clásico">Corte clásico</option>
+        <option value="Fade">Fade</option>
+        <option value="Diseño">Diseño</option>
+        <option value="Barba">Barba</option>
+        <option value="Color">Color</option>
+        <option value="Tratamiento">Tratamiento</option>
+        <option value="Otro">Otro</option>
+      </select>
+      {errors.category && (
+        <span className="text-danger text-sm">{errors.category.message}</span>
+      )}
 
       <Input
         isRequired
