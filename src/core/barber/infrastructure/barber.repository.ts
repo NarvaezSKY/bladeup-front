@@ -39,7 +39,7 @@ const getServicesByBarber = async (id: string) => {
 
 const getBarberAppointments = async () => {
   try {
-    const response = await axiosInstance.get("/appointments/barber=pending");
+    const response = await axiosInstance.get("/appointments/barber-auth");
     return response.data;
   } catch (error) {
     console.error("Error during get barber appointments:", error);

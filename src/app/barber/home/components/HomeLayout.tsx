@@ -124,28 +124,67 @@ const BarberHome = () => {
                 <p className="text-default-700 font-bold">
                   Precio del servicio: ${item.service?.price}
                 </p>
-                <div className="flex gap-2">
-                  <Button
-                    color="secondary"
-                    size="sm"
-                    radius="full"
-                    onClick={() =>
-                      handleUpdateAppointmentStatus(item._id, "accepted")
-                    }
-                  >
-                    Aceptar
-                  </Button>
-                  <Button
-                    color="danger"
-                    size="sm"
-                    radius="full"
-                    onClick={() =>
-                      handleUpdateAppointmentStatus(item._id, "rejected")
-                    }
-                  >
-                    Rechazar
-                  </Button>
-                </div>
+                {item.status === "pending" && (
+
+                  <div className="flex gap-2">
+                    <Button
+                      color="secondary"
+                      size="sm"
+                      radius="full"
+                      onClick={() =>
+                        handleUpdateAppointmentStatus(item._id, "accepted")
+                      }
+                    >
+                      Aceptar
+                    </Button>
+                    <Button
+                      color="danger"
+                      size="sm"
+                      radius="full"
+                      onClick={() =>
+                        handleUpdateAppointmentStatus(item._id, "rejected")
+                      }
+                    >
+                      Rechazar
+                    </Button>
+                  </div>
+                )}
+                {
+                  item.status === "accepted" && (
+                    <div>
+                      <Button
+                        color="secondary"
+                        variant="bordered"
+                        isDisabled
+                        size="sm"
+                        radius="full"
+
+                      >
+                        Aceptada
+                      </Button>
+                      <Button
+                        color="success"
+                        onClick={() => handleUpdateAppointmentStatus(item._id, "completed")}
+                        size="sm"
+                        radius="full"
+
+                      >
+                        Marcar como completada
+                      </Button>
+                    </div>
+
+                  )
+                }
+                {
+                  item.status === "rejected" && (
+                    <p className="text-red-600 font-semibold">Rechazada</p>
+                  )
+                }
+                {
+                  item.status === "completed" && (
+                    <p className="text-blue-600 font-semibold">Completada</p>
+                  )
+                }
               </CardFooter>
             </Card>
           ))}

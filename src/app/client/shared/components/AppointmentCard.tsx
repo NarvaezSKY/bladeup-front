@@ -37,12 +37,14 @@ export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
     rejected: "Rechazado",
     cancelled: "Cancelado",
     pending: "Pendiente",
+    completed: "Completado",
   };
   const statusColorMap: Record<string, "secondary" | "success" | "warning" | "danger"> = {
   pending: "secondary",
   accepted: "success",
   rejected: "warning",
   cancelled: "danger",
+  completed: "success",
 };
 
   return (
