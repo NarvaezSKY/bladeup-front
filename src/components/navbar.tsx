@@ -35,9 +35,10 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <Link
-            className="flex justify-start items-center gap-1"
+            className="flex justify-start items-center gap-1 cursor-pointer"
             color="foreground"
-            href="/"
+            onClick={window.location.reload}
+            isExternal={false}
           >
             <img alt="Logo" className="h-16 w-16" src={logo} />
             <p className="font-bold text-inherit text-3xl">BladeUp!</p>

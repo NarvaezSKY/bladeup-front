@@ -39,7 +39,7 @@ export const useBarberHomeData = () => {
     setLoading(true);
     try {
       await createService(data);
-      toast.success("Service uploaded successfully!");
+      toast.success("Servicio creado exitosamente!");
       await getMyServices();
     } catch (error) {
       console.error("Error uploading service:", error);
@@ -51,7 +51,7 @@ export const useBarberHomeData = () => {
     setLoading(true);
     try {
       await deleteService(id);
-      toast.success("Service deleted successfully!");
+      toast.success("Servicio eliminado exitosamente!");
       await getMyServices();
     } catch (error) {
       toast.error("Error deleting service");
@@ -62,7 +62,7 @@ export const useBarberHomeData = () => {
   const handleUpdateAppointmentStatus = async (id: string, status: string) => {
     try {
       await updateAppointmentStatus(id, status);
-      toast.success("Appointment status updated successfully!");
+      toast.success("Estado de cita actualizado exitosamente!");
       await getBarberAppointments();
     } catch (error) {
       toast.error("Error updating appointment status");

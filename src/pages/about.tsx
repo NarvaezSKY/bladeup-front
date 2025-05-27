@@ -8,7 +8,8 @@ export default function DocsPage() {
         <div className="inline-block max-w-lg text-center justify-center">
           <h1 className={title()}>Sobre nosotros</h1>
 
-          {/* <img src="https://media.tenor.com/n2IRX4mODCcAAAAM/xddd.gif" alt="" width={500}/> */}
+          <img src="https://media.tenor.com/bfgjTc0DxiIAAAAM/sad-emoji.gif" alt="" width={500}/>
+          <p>Profe por favor no dejes que perdamos la nota</p>
         </div>
       </section>
     </DefaultLayout>
